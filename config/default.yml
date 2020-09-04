@@ -1,0 +1,15 @@
+server:
+  port: 1998
+
+db:
+  type: "postgres"
+  port: 5432
+  database: "wireevent"
+  host: "localhost"
+  username: "nikhil"
+  password: "princeofpersia"
+  synchronize: true
+
+jwt:
+  secret: "asdasdaD"
+  expiresIn: 3600
