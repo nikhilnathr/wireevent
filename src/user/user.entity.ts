@@ -4,6 +4,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
   OneToMany,
 } from "typeorm";
 import * as bcrypt from "bcryptjs";
@@ -29,6 +31,12 @@ export class User extends BaseEntity {
 
   @Column()
   salt: string;
+
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: "timestamp" })
+  updatedAt: Date;
 
   // @OneToMany(
   //   type => Task,
