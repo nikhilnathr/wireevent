@@ -1,10 +1,19 @@
-import { Injectable, UnauthorizedException, Logger } from "@nestjs/common";
+import {
+  Injectable,
+  UnauthorizedException,
+  Logger,
+  NotFoundException,
+  BadRequestException,
+} from "@nestjs/common";
 import { UserRepository } from "./user.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserCredentialsDto } from "./dto/user-credentials.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { JwtService } from "@nestjs/jwt";
 import { JwtPayload } from "./jwt-payload.interface";
+import { UpdateUserDto } from "./dto/user-update.dto";
+import { User } from "./user.entity";
+import { UserRole } from "./user-role.enum";
 
 @Injectable()
 export class UserService {
@@ -36,5 +45,44 @@ export class UserService {
       `Generated JWT Token with payload ${JSON.stringify(payload)}`,
     );
     return { accessToken };
+  }
+
+  async update(
+    id: number,
+    updateUserDto: UpdateUserDto,
+    currentUser: User,
+  ): Promise<User> {
+    let user = await this.getUserById(id, currentUser);
+
+    // check if fname and lname not null
+    if (updateUserDto.fname === null || updateUserDto.lname === null) {
+      throw new BadRequestException(["fname and lname must not be empty"]);
+    }
+
+    user = Object.assign(user, updateUserDto);
+    await user.save();
+    this.logger.debug(`Updated user ${id}`);
+    return user;
+  }
+
+  async getUserById(id: number, currentUser: User): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { id },
+    });
+
+    if (
+      !(
+        user &&
+        (user.id === currentUser.id ||
+          currentUser.role in [UserRole.ADMIN, UserRole.MANAGER])
+      )
+    ) {
+      this.logger.debug(
+        `${currentUser.email}(${currentUser.id}) tried to update user ${id}`,
+      );
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    return user;
   }
 }

@@ -1,7 +1,20 @@
-import { Controller, Post, Body, ValidationPipe } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  ValidationPipe,
+  Patch,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+} from "@nestjs/common";
 import { UserCredentialsDto } from "./dto/user-credentials.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { UserService } from "./user.service";
+import { UpdateUserDto } from "./dto/user-update.dto";
+import { User } from "./user.entity";
+import { GetUser } from "./get-user.decorator";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("user")
 export class UserController {
@@ -10,6 +23,16 @@ export class UserController {
   @Post()
   register(@Body(ValidationPipe) registerDto: RegisterDto): Promise<void> {
     return this.userService.register(registerDto);
+  }
+
+  @UseGuards(AuthGuard())
+  @Patch(":id")
+  update(
+    @Param("id", ParseIntPipe) id: number,
+    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
+    @GetUser() currentUser: User,
+  ): Promise<User> {
+    return this.userService.update(id, updateUserDto, currentUser);
   }
 
   @Post("login")
