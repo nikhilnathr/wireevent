@@ -3,19 +3,20 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
   OneToMany,
 } from "typeorm";
 import * as bcrypt from "bcryptjs";
+import { UserRole } from "./user-role.enum";
 // import { Task } from '../tasks/task.entity';
 
 @Entity()
-@Unique(["email"])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -29,6 +30,37 @@ export class User extends BaseEntity {
 
   @Column()
   salt: string;
+
+  @Column({
+    type: "enum",
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: UserRole;
+
+  @Column({ nullable: true })
+  phone: string;
+
+  @Column({ nullable: true })
+  address: string;
+
+  @Column({ nullable: true })
+  picture: string;
+
+  @Column({ nullable: true })
+  position: string;
+
+  @Column({ nullable: true })
+  institution: string;
+
+  @Column({ nullable: true })
+  website: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   // @OneToMany(
   //   type => Task,
