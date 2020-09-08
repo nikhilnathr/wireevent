@@ -38,6 +38,14 @@ export class UserRepository extends Repository<User> {
     }
   }
 
+  async updateUserPassword(user: User, newPassword: string): Promise<void> {
+    user.salt = await bcrypt.genSalt();
+    user.password = await this.hashPassword(newPassword, user.salt);
+
+    user.save();
+    this.logger.debug(`Updated password for userId: ${user.id}`);
+  }
+
   async validateUserPassword(
     userCredentialsDto: UserCredentialsDto,
   ): Promise<string> {

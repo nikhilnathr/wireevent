@@ -15,6 +15,7 @@ import { UpdateUserDto } from "./dto/user-update.dto";
 import { User } from "./user.entity";
 import { GetUser } from "./get-user.decorator";
 import { AuthGuard } from "@nestjs/passport";
+import { UpdatePasswordDto } from "./dto/update-password.dto";
 
 @Controller("user")
 export class UserController {
@@ -40,5 +41,15 @@ export class UserController {
     @Body(ValidationPipe) userCredentialsDto: UserCredentialsDto,
   ): Promise<{ accessToken: string }> {
     return this.userService.login(userCredentialsDto);
+  }
+
+  @UseGuards(AuthGuard())
+  @Patch(":id/password")
+  updatePassword(
+    @Param("id", ParseIntPipe) id: number,
+    @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,
+    @GetUser() currentUser: User,
+  ): Promise<void> {
+    return this.userService.updatePassword(id, updatePasswordDto, currentUser);
   }
 }

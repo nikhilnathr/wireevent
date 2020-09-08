@@ -14,6 +14,7 @@ import { JwtPayload } from "./jwt-payload.interface";
 import { UpdateUserDto } from "./dto/user-update.dto";
 import { User } from "./user.entity";
 import { UserRole } from "./user-role.enum";
+import { UpdatePasswordDto } from "./dto/update-password.dto";
 
 @Injectable()
 export class UserService {
@@ -63,6 +64,25 @@ export class UserService {
     await user.save();
     this.logger.debug(`Updated user ${id}`);
     return user;
+  }
+
+  async updatePassword(
+    id: number,
+    updatePasswordDto: UpdatePasswordDto,
+    currentUser: User,
+  ): Promise<void> {
+    let user = await this.getUserById(id, currentUser);
+
+    if (!(await user.validatePassword(updatePasswordDto.oldPassword))) {
+      throw new BadRequestException([
+        "Unable to update user password. Invalid old password",
+      ]);
+    }
+
+    return this.userRepository.updateUserPassword(
+      user,
+      updatePasswordDto.newPassword,
+    );
   }
 
   async getUserById(id: number, currentUser: User): Promise<User> {
