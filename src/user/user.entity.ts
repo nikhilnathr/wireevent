@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import * as bcrypt from "bcryptjs";
 import { UserRole } from "./user-role.enum";
+import { Organisation } from "../organisation/organisation.entity";
 // import { Task } from '../tasks/task.entity';
 
 @Entity()
@@ -62,12 +63,12 @@ export class User extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  // @OneToMany(
-  //   type => Task,
-  //   task => task.user,
-  //   { eager: true },
-  // )
-  // tasks: Task[];
+  @OneToMany(
+    type => Organisation,
+    organisation => organisation.owner,
+    { eager: false },
+  )
+  organisations: Organisation[];
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
