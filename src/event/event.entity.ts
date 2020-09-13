@@ -33,7 +33,7 @@ export class Event extends BaseEntity {
   updatedAt: Date;
 
   @ManyToOne(
-    type => Organisation,
+    () => Organisation,
     organisation => organisation.events,
     { eager: false, nullable: false },
   )

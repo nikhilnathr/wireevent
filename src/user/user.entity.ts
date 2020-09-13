@@ -64,7 +64,7 @@ export class User extends BaseEntity {
   updatedAt: Date;
 
   @OneToMany(
-    type => Organisation,
+    () => Organisation,
     organisation => organisation.owner,
     { eager: false },
   )

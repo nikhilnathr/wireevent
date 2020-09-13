@@ -10,6 +10,7 @@ export function DateInRangeOf(
   property: { min: Date; max: Date },
   validationOptions?: ValidationOptions,
 ) {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   return function(object: Object, propertyName: string) {
     registerDecorator({
       target: object.constructor,

@@ -31,11 +31,11 @@ export class OrganisationService {
   }
 
   async create(
-    OrganisationDto: OrganisationDto,
+    organisationDto: OrganisationDto,
     owner: User,
   ): Promise<Organisation> {
     return this.organisationRepository.createOrganisation(
-      OrganisationDto,
+      organisationDto,
       owner,
     );
   }

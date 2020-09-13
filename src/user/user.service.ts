@@ -71,7 +71,7 @@ export class UserService {
     updatePasswordDto: UpdatePasswordDto,
     currentUser: User,
   ): Promise<void> {
-    let user = await this.getUserById(id, currentUser);
+    const user = await this.getUserById(id, currentUser);
 
     if (!(await user.validatePassword(updatePasswordDto.oldPassword))) {
       throw new BadRequestException([

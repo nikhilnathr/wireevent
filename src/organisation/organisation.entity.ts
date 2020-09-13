@@ -35,14 +35,14 @@ export class Organisation extends BaseEntity {
   updatedAt: Date;
 
   @ManyToOne(
-    type => User,
+    () => User,
     user => user.organisations,
     { eager: true, nullable: false },
   )
   owner: User;
 
   @OneToMany(
-    type => Event,
+    () => Event,
     event => event.organisation,
     { eager: true },
   )
