@@ -1,10 +1,4 @@
-import {
-  IsString,
-  Length,
-  IsEmail,
-  IsOptional,
-  IsUrl,
-} from "class-validator";
+import { IsString, Length, IsEmail, IsOptional, IsUrl } from "class-validator";
 
 export class OrganisationDto {
   @IsString()

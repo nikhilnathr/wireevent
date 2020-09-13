@@ -9,6 +9,7 @@ import {
   ManyToOne,
 } from "typeorm";
 import { User } from "src/user/user.entity";
+import { Event } from "../event/event.entity";
 
 @Entity()
 export class Organisation extends BaseEntity {
@@ -39,4 +40,11 @@ export class Organisation extends BaseEntity {
     { eager: true, nullable: false },
   )
   owner: User;
+
+  @OneToMany(
+    type => Event,
+    event => event.organiser,
+    { eager: false },
+  )
+  events: Event[];
 }
