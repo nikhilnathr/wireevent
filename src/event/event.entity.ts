@@ -35,7 +35,7 @@ export class Event extends BaseEntity {
   @ManyToOne(
     type => Organisation,
     organisation => organisation.events,
-    { eager: true, nullable: false },
+    { eager: false, nullable: false },
   )
-  organiser: Organisation;
+  organisation: Organisation;
 }

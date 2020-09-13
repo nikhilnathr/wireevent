@@ -27,10 +27,11 @@ export class EventController {
   @UseGuards(AuthGuard())
   @UsePipes(ValidationPipe)
   createEvent(
-    @Param("oranisationId", ParseIntPipe) organiserId: number,
+    @GetUser() user: User,
+    @Param("oranisationId", ParseIntPipe) organisationId: number,
     @Body() createEventDto: CreateEventDto,
   ) {
-    return this.eventService.createEvent(createEventDto, organiserId);
+    return this.eventService.createEvent(createEventDto, organisationId, user);
   }
 
   @Get(":id")

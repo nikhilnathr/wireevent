@@ -8,7 +8,10 @@ import { Organisation } from "src/organisation/organisation.entity";
 export class EventRepository extends Repository<Event> {
   private logger = new Logger("EventRepository");
 
-  async createEvent(createEventDto: CreateEventDto, organiser: Organisation) {
+  async createEvent(
+    createEventDto: CreateEventDto,
+    organisation: Organisation,
+  ) {
     const { name, description, startTime, endTime } = createEventDto;
 
     const event = this.create();
@@ -16,7 +19,7 @@ export class EventRepository extends Repository<Event> {
     event.description = description;
     event.startTime = startTime;
     event.endTime = endTime;
-    event.organiser = organiser;
+    event.organisation = organisation;
 
     try {
       await event.save();
@@ -28,7 +31,7 @@ export class EventRepository extends Repository<Event> {
       throw new InternalServerErrorException();
     }
 
-    delete event.organiser;
+    delete event.organisation;
 
     return event;
   }

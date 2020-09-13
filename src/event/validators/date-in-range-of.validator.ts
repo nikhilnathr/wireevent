@@ -25,7 +25,7 @@ export function DateInRangeOf(
 export class DateInRangeOfConstraint implements ValidatorConstraintInterface {
   validate(value: any, args: ValidationArguments) {
     const [{ min, max }] = args.constraints;
-    const valueDate = new Date(value);
-    return valueDate < max && valueDate > min;
+    const valueDate = new Date(value).valueOf();
+    return valueDate < max.valueOf() && valueDate > min.valueOf();
   }
 }

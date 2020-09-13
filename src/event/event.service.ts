@@ -4,6 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Event } from "../event/event.entity";
 import { CreateEventDto } from "./dto/create-event.dto";
 import { OrganisationService } from "src/organisation/organisation.service";
+import { User } from "src/user/user.entity";
 
 @Injectable()
 export class EventService {
@@ -18,6 +19,7 @@ export class EventService {
   async getEventById(id: number): Promise<Event> {
     const event = await this.eventRepository.findOne({
       where: { id },
+      relations: ["organisation"],
     });
 
     if (!event) {
@@ -29,12 +31,14 @@ export class EventService {
 
   async createEvent(
     createEventDto: CreateEventDto,
-    organiserId: number,
+    organisationId: number,
+    user: User,
   ): Promise<Event> {
-    const organiser = await this.organisationService.getOrganisationById(
-      organiserId,
+    const organisation = await this.organisationService.getOrganisationById(
+      organisationId,
+      user,
     );
 
-    return this.eventRepository.createEvent(createEventDto, organiser);
+    return this.eventRepository.createEvent(createEventDto, organisation);
   }
 }

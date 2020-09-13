@@ -43,8 +43,11 @@ export class Organisation extends BaseEntity {
 
   @OneToMany(
     type => Event,
-    event => event.organiser,
-    { eager: false },
+    event => event.organisation,
+    { eager: true },
   )
   events: Event[];
+
+  @Column()
+  ownerId: number;
 }

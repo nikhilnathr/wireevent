@@ -14,10 +14,14 @@ export class OrganisationService {
     private organisationRepository: OrganisationRepository,
   ) {}
 
-  async getOrganisationById(id: number): Promise<Organisation> {
-    const organisation = await this.organisationRepository.findOne({
-      where: { id },
-    });
+  async getOrganisationById(id: number, user?: User): Promise<Organisation> {
+    const organisation = user
+      ? await this.organisationRepository.findOne({
+          where: { id, ownerId: user.id },
+        })
+      : await this.organisationRepository.findOne({
+          where: { id },
+        });
 
     if (!organisation) {
       throw new NotFoundException(`Organisation with id ${id} not found`);
