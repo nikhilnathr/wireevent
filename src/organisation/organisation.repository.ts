@@ -1,10 +1,6 @@
 import { Repository, EntityRepository } from "typeorm";
 import { User } from "../user/user.entity";
-import {
-  ConflictException,
-  InternalServerErrorException,
-  Logger,
-} from "@nestjs/common";
+import { InternalServerErrorException, Logger } from "@nestjs/common";
 import { OrganisationDto } from "./dto/organisation.dto";
 import { Organisation } from "./organisation.entity";
 
