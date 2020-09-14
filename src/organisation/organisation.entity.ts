@@ -44,7 +44,7 @@ export class Organisation extends BaseEntity {
   @OneToMany(
     () => Event,
     event => event.organisation,
-    { eager: true },
+    { eager: false },
   )
   events: Event[];
 

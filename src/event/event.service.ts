@@ -29,6 +29,14 @@ export class EventService {
     return event;
   }
 
+  async getAllEvents(): Promise<Event[]> {
+    const events = await this.eventRepository.find({
+      relations: ["organisation"],
+    });
+
+    return events;
+  }
+
   async createEvent(
     createEventDto: CreateEventDto,
     organisationId: number,

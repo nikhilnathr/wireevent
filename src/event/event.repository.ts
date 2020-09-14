@@ -31,8 +31,6 @@ export class EventRepository extends Repository<Event> {
       throw new InternalServerErrorException();
     }
 
-    delete event.organisation;
-
     return event;
   }
 }

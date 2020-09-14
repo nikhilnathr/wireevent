@@ -38,4 +38,9 @@ export class EventController {
   getEventById(@Param("id", ParseIntPipe) id: number): Promise<Event> {
     return this.eventService.getEventById(id);
   }
+
+  @Get()
+  getAllEvents(): Promise<Event[]> {
+    return this.eventService.getAllEvents();
+  }
 }
