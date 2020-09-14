@@ -44,11 +44,9 @@ export class EventController {
 
   @Get()
   getAllEvents(
-    @Query() paginationDto: PaginationDto,
+    @Query(new ValidationPipe({ transform: true }))
+    paginationDto: PaginationDto,
   ): Promise<PaginatedEventsDto> {
-    paginationDto.page = Number(paginationDto.page) || 1;
-    paginationDto.limit = Number(paginationDto.limit) || 10;
-
     return this.eventService.getAllEvents({
       ...paginationDto,
       limit: paginationDto.limit,
