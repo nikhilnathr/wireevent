@@ -9,6 +9,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Query,
 } from "@nestjs/common";
 import { User } from "src/user/user.entity";
 import { GetUser } from "src/user/get-user.decorator";
@@ -16,6 +17,8 @@ import { AuthGuard } from "@nestjs/passport";
 import { EventService } from "./event.service";
 import { CreateEventDto } from "./dto/create-event.dto";
 import { Event } from "../event/event.entity";
+import { PaginationDto } from "./dto/pagination.dto";
+import { PaginatedEventsDto } from "./dto/paginated-events.dto";
 
 @Controller("event")
 export class EventController {
@@ -40,7 +43,15 @@ export class EventController {
   }
 
   @Get()
-  getAllEvents(): Promise<Event[]> {
-    return this.eventService.getAllEvents();
+  getAllEvents(
+    @Query() paginationDto: PaginationDto,
+  ): Promise<PaginatedEventsDto> {
+    paginationDto.page = Number(paginationDto.page) || 1;
+    paginationDto.limit = Number(paginationDto.limit) || 10;
+
+    return this.eventService.getAllEvents({
+      ...paginationDto,
+      limit: paginationDto.limit,
+    });
   }
 }
